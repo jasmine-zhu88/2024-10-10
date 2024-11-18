@@ -1,7 +1,7 @@
 #count words
 import glob
 
-#map
+#-----------map
 map_res=[]
 for file in glob.glob("/home/local/Downloads/pg*"):
     with open(file) as f:
@@ -11,11 +11,11 @@ for file in glob.glob("/home/local/Downloads/pg*"):
 
 
 
-#sort
+#-----------sort
 map_res.sort(key=lambda x:x[0])    
 
 
-#reduce
+#------------reduce
 current_word=None
 current_count=0
 word=None

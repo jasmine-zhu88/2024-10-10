@@ -1,28 +1,47 @@
+#count words
+import glob
 
-"""
-from pyspark import SparkConf,SparkContext
-if __name__=="__main__":
-    conf=SparkConf()
-    sc=SparkContext(conf=conf)
-    sc.textFile("/home/local/Downloads/pg20417.txt").flatMap(lambda line:line.strip().split()).map(lambda x:(x,1)).reduceByKey(lambda a,b:a+b).saveAsTextFile("/home/local/Downloads/wc")
-    sc.stop()
-    """
+#map
+map_res=[]
+for file in glob.glob("/home/local/Downloads/pg*"):
+    with open(file) as f:
+        for line in f:
+            line=line.strip().split()
+            map_res.extend(list(map(lambda x: (x,1),line)))
 
-from pyspark import SparkConf,SparkContext
-import sys
-if __name__=="__main__":
-    if len(sys.argv)!=3:
-        print("Usage:wordcount <input> <output>",file=sys.stderr)
-        sys.exit(-1)
-    conf=SparkConf()
-    sc=SparkContext(conf=conf)
 
-    def printResult():
-        counts=sc.textFile(sys.argv[1]).flatMap(lambda line:line.strip().split()).map(lambda x:(x,1)).reduceByKey(lambda a,b:a+b)
-        output=counts.collect()
-        for (word,count) in output:
-            print(f"{word}:{count}")
-    def saveFile():
-        sc.textFile(sys.argv[1]).flatMap(lambda line:line.strip().split()).map(lambda x:(x,1)).reduceByKey(lambda a,b:a+b).saveAsTextFile(sys.argv[2])
-    saveFile()
-    sc.stop()
+
+#sort
+map_res.sort(key=lambda x:x[0])    
+
+
+#reduce
+current_word=None
+current_count=0
+word=None
+reduce_rel=[]
+with open("/home/local/Downloads/pg.txt","w") as f:
+    for item in map_res:
+    #if len(item)>1:
+        word=item[0]
+        count=item[1]
+    #else:
+    #    continue
+
+        if current_word==word:
+            current_count+=count
+        else:
+            if current_word:
+                #print(f"{current_word}\t{current_count}")
+                #f.write(f"{current_word}\t{current_count}\n")
+                reduce_rel.append((current_word,current_count))
+            current_word=word
+            current_count=count
+    if current_word==word:
+        #print(f"{current_word}\t{current_count}")
+        #f.write(f"{current_word}\t{current_count}\n")
+        reduce_rel.append((current_word,current_count))
+
+reduce_rel.sort(key=lambda x:x[1])
+for item in reduce_rel:
+    print(item,end="\n")

@@ -8,6 +8,10 @@ if __name__=="__main__":
     sc.stop()
     """
 
+#run cmd in spark: ./spark-submit /home/local/Documents/Python-script/Gitfolder/2024-10-10/countword-spark.py /home/local/Downloads/pg4300.txt /home/local/Downloads/spark/
+
+
+
 from pyspark import SparkConf,SparkContext
 import sys
 if __name__=="__main__":

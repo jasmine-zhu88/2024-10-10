@@ -1,3 +1,4 @@
+from pyspark import SparkConf
 from pyspark.sql import SparkSession
 import pyspark.pandas as ps
 from pyspark.sql.types import *
@@ -23,7 +24,7 @@ def binary_search(ip_num,broadcast_value):
 
 
 def main():
-    spark=SparkSession.builder.appName("hotplace_basedon_ip").getOrCreate()
+    spark=SparkSession.builder.master('local[5]').appName("hotplace_basedon_ip").getOrCreate()
     sc=spark.sparkContext
 #-------------------------------------------------------------
     #read the city ip and latitude and longtitue data in rdd
